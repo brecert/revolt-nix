@@ -23,16 +23,15 @@
         naersk-lib = naersk.lib.${system}.override { inherit cargo rustc; };
         rustPlatform = pkgs.makeRustPlatform { inherit cargo rustc; };
 
-        inherit (pkgs) lib;
+        inherit (pkgs) lib fetchFromGitHub;
       in
       {
         packages = {
-          delta = let inherit (pkgs) fetchFromGitHub; in
-            rustPlatform.buildRustPackage  rec {
-
+          delta =
+            rustPlatform.buildRustPackage rec {
               pname = "delta";
-              version = "ab4c3f913edb1a04fd81f277a42fc1ff3f0f77c6";
-            
+              version = "7757769f797cc1795161119de3286719045235dd";
+
               release = false;
 
               OPENSSL_LIB_DIR = "${lib.getLib pkgs.openssl}/lib";
@@ -56,9 +55,8 @@
                 mv $out/bin/revolt $out/bin/${pname}
               '';
 
-              cargoSha256 = "sha256-oK45/rCP1F6wsKKPGNgw56jIMv9O3qGsO1zqBKgg6cE=";
+              cargoSha256 = "sha256-9u17rXiQ+qbTR4piiuS5Kzx4F0SCR2z3iEYGIIaNvjY=";
             };
-
         };
       });
 }
