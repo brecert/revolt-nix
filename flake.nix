@@ -23,7 +23,7 @@
         naersk-lib = naersk.lib.${system}.override { inherit cargo rustc; };
         rustPlatform = pkgs.makeRustPlatform { inherit cargo rustc; };
 
-        lib = pkgs.lib;
+        inherit (pkgs) lib;
       in
       {
         packages = {
