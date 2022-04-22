@@ -23,8 +23,9 @@
         naersk-lib = naersk.lib.${system}.override { inherit cargo rustc; };
         rustPlatform = pkgs.makeRustPlatform { inherit cargo rustc; };
 
-        inherit (pkgs) lib fetchFromGitHub mkYarnPackage;
+        inherit (pkgs) lib fetchFromGitHub mkYarnPackage runCommand writeShellScript;
       in
+      rec
       {
         packages = {
           delta =
@@ -98,7 +99,16 @@
             distPhase = "true";
             fixupPhase = ":";
           };
+        };
 
+        apps = {
+          # todo: make this nicer
+          revite = {
+            type = "app";
+            program = "${writeShellScript "revite" ''
+              ${pkgs.darkhttpd}/bin/darkhttpd "${packages.revite}/dist" "$@"
+            ''}";
+          };
         };
       });
 }
