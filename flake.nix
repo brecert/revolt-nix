@@ -28,19 +28,18 @@
       rec
       {
         packages = {
-          january = callPackage ./january { inherit pkgs; };
-          autumn = callPackage ./autumn { inherit pkgs; };
-          revite = callPackage ./revite { inherit pkgs; };
-          delta = callPackage ./delta { inherit pkgs rustPlatform; };
+          january = callPackage ./packages/january { inherit pkgs; };
+          autumn = callPackage ./packages/autumn { inherit pkgs; };
+          revite = callPackage ./packages/revite { inherit pkgs; };
+          delta = callPackage ./packages/delta { inherit pkgs rustPlatform; };
         };
 
         apps = {
-          # todo: make this nicer
           revite = {
             type = "app";
-            program = "${writeShellScript "revite" ''
+            program = toString (writeShellScript "revite" ''
               ${pkgs.darkhttpd}/bin/darkhttpd "${packages.revite}/dist" "$@"
-            ''}";
+            '');
           };
         };
       });
