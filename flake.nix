@@ -28,8 +28,9 @@
       rec
       {
         packages = {
-          delta = callPackage ./delta { inherit pkgs rustPlatform; };
+          january = callPackage ./january { inherit pkgs; };
           revite = callPackage ./revite { inherit pkgs; };
+          delta = callPackage ./delta { inherit pkgs rustPlatform; };
         };
 
         apps = {
