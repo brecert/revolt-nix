@@ -29,6 +29,7 @@
       {
         packages = {
           january = callPackage ./january { inherit pkgs; };
+          autumn = callPackage ./autumn { inherit pkgs; };
           revite = callPackage ./revite { inherit pkgs; };
           delta = callPackage ./delta { inherit pkgs rustPlatform; };
         };
