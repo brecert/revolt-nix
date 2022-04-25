@@ -12,7 +12,7 @@
   # todo:
   # mkShellApp { name, script, ENV.. } 
 
-  outputs = inputs@{ self, nixpkgs, flake-utils, fenix }:
+  outputs = inputs@{ self, nixpkgs, flake-utils, fenix, nixos-generators }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         inherit (fenix.packages.${system}.minimal) cargo rustc;
@@ -49,10 +49,6 @@
 
           redis = flake-utils.lib.mkApp { drv = packages.redis; exePath = "/bin/redis-server"; };
           mongodb = flake-utils.lib.mkApp { drv = packages.mongodb; exePath = "/bin/mongod"; };
-        };
-
-        nixosModules = {
-          autumn = import ./modules/autumn;
         };
       });
 }
