@@ -1,11 +1,11 @@
 { pkgs
 , lib ? pkgs.lib
 , fetchFromGitHub ? pkgs.fetchFromGitHub
-, rustPlatform ? pkgs.rustPlatform  
+, rustPlatform ? pkgs.rustPlatform
 }:
 rustPlatform.buildRustPackage rec {
   pname = "january";
-  version = "04830ca82c6310033ca21d6615f4fe9894d12fe7";
+  version = "5d98afccf087cbebf3b7e0ac13f753c688c0a25a";
 
   OPENSSL_LIB_DIR = "${lib.getLib pkgs.openssl}/lib";
   OPENSSL_INCLUDE_DIR = "${lib.getDev pkgs.openssl}/include";
@@ -16,11 +16,11 @@ rustPlatform.buildRustPackage rec {
   ];
 
   src = fetchFromGitHub {
-    owner = "revoltchat";
+    owner = "brecert";
     repo = pname;
     rev = version;
-    sha256 = "sha256-f5K9w3g7BW26ndyXrrn9tqu7D8SoU1g1VdpZEbikgCE=";
+    sha256 = "sha256-QSIi8bQLIkZD3DZLHGnBDc0svyL2Sq7ScaFUeEPnFpM=";
   };
 
-  cargoSha256 = "sha256-mxH7pZwWmDaM50Cy+xh/j59tqne5VUwGlM4vS9ujdDw=";
+  cargoSha256 = "sha256-cu3rw2jIVRd0GdnDTuEbaDt7vx66cuGuzDF4oeOoR/c=";
 }

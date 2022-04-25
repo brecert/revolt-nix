@@ -2,6 +2,8 @@
 , lib ? pkgs.lib
 , fetchFromGitHub ? pkgs.fetchFromGitHub
 , mkYarnPackage ? pkgs.mkYarnPackage
+, VITE_API_URL ? "https://api.revolt.chat"
+, VITE_THEMES_URL ? "https://themes.revolt.chat"
 }:
 mkYarnPackage rec {
   pname = "revite";
@@ -16,6 +18,8 @@ mkYarnPackage rec {
     leaveDotGit = true;
     fetchSubmodules = true;
   };
+
+  inherit VITE_API_URL VITE_THEMES_URL;
 
   nativeBuildInputs = with pkgs; [
     makeWrapper

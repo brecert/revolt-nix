@@ -7,32 +7,37 @@
       url = "github:nix-community/fenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    naersk = {
-      url = "github:nmattia/naersk";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
-  outputs = inputs@{ self, nixpkgs, flake-utils, fenix, naersk }:
+  # todo:
+  # mkShellApp { name, script, ENV.. } 
+
+  outputs = inputs@{ self, nixpkgs, flake-utils, fenix }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         inherit (fenix.packages.${system}.minimal) cargo rustc;
 
-        pkgs = nixpkgs.legacyPackages.${system};
-        naersk-lib = naersk.lib.${system}.override { inherit cargo rustc; };
+        pkgs = import nixpkgs { inherit system overlay; };
         rustPlatform = pkgs.makeRustPlatform { inherit cargo rustc; };
 
-        inherit (pkgs) lib callPackage writeShellScript;
+        inherit (pkgs) lib stdenv callPackage writeShellScript;
+
+        packages = {
+          mongodb = callPackage ./packages/mongodb { inherit pkgs; };
+          redis = pkgs.redis;
+
+          # todo: mkClient, mkServer, mkAutumn, mkJanuary
+          january = callPackage ./packages/january { inherit pkgs; };
+          autumn = callPackage ./packages/autumn { inherit pkgs; };
+          revite = callPackage ./packages/revite { inherit pkgs; VITE_API_URL = "https://local.revolt.chat:8000"; VITE_THEMES_URL = "https://themes.revolt.chat"; };
+          delta = callPackage ./packages/delta { inherit pkgs rustPlatform; };
+        };
+
+        overlay = final: prev: packages;
       in
       rec
       {
-        packages = {
-          january = callPackage ./packages/january { inherit pkgs; };
-          autumn = callPackage ./packages/autumn { inherit pkgs; };
-          revite = callPackage ./packages/revite { inherit pkgs; };
-          delta = callPackage ./packages/delta { inherit pkgs rustPlatform; };
-        };
+        inherit packages overlay;
 
         apps = {
           revite = {
@@ -41,6 +46,13 @@
               ${pkgs.darkhttpd}/bin/darkhttpd "${packages.revite}/dist" "$@"
             '');
           };
+
+          redis = flake-utils.lib.mkApp { drv = packages.redis; exePath = "/bin/redis-server"; };
+          mongodb = flake-utils.lib.mkApp { drv = packages.mongodb; exePath = "/bin/mongod"; };
+        };
+
+        nixosModules = {
+          autumn = import ./modules/autumn;
         };
       });
 }
