@@ -33,6 +33,6 @@ stdenv.mkDerivation {
     mkdir -p $out
     dpkg -x $src $out
     mkdir $out/bin
-    mv $out/usr/bin/ $out/bin/
+    mv $out/usr/bin/ $out/
   '';
 }

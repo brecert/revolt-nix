@@ -12,7 +12,7 @@
   # todo:
   # mkShellApp { name, script, ENV.. } 
 
-  outputs = inputs@{ self, nixpkgs, flake-utils, fenix, nixos-generators }:
+  outputs = inputs@{ self, nixpkgs, flake-utils, fenix }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         inherit (fenix.packages.${system}.minimal) cargo rustc;
@@ -28,9 +28,10 @@
 
           # todo: mkClient, mkServer, mkAutumn, mkJanuary
           january = callPackage ./packages/january { inherit pkgs; };
-          autumn = callPackage ./packages/autumn { inherit pkgs; };
+          autumn = (callPackage ./packages/autumn { inherit pkgs; });
           revite = callPackage ./packages/revite { inherit pkgs; VITE_API_URL = "https://local.revolt.chat:8000"; VITE_THEMES_URL = "https://themes.revolt.chat"; };
           delta = callPackage ./packages/delta { inherit pkgs rustPlatform; };
+          bonfire = callPackage ./packages/bonfire { inherit pkgs rustPlatform; };
         };
 
         overlay = final: prev: packages;
@@ -43,12 +44,18 @@
           revite = {
             type = "app";
             program = toString (writeShellScript "revite" ''
-              ${pkgs.darkhttpd}/bin/darkhttpd "${packages.revite}/dist" "$@"
+              ${pkgs.httplz}/bin/httplz "${packages.revite}/dist" "$@"
             '');
           };
 
           redis = flake-utils.lib.mkApp { drv = packages.redis; exePath = "/bin/redis-server"; };
           mongodb = flake-utils.lib.mkApp { drv = packages.mongodb; exePath = "/bin/mongod"; };
+        };
+
+        devShell = pkgs.mkShell {
+          packages = (builtins.attrValues packages) ++ [ pkgs.httplz ];
+          inputsFrom = [ packages.revite ];
+          revite = toString packages.revite;
         };
       });
 }
