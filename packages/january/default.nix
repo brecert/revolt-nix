@@ -1,26 +1,31 @@
-{ pkgs
-, lib ? pkgs.lib
-, fetchFromGitHub ? pkgs.fetchFromGitHub
-, rustPlatform ? pkgs.rustPlatform
+{ lib
+, fetchFromGitHub
+, pkg-config
+, openssl
+, craneLib
 }:
-rustPlatform.buildRustPackage rec {
+craneLib.buildPackage rec {
   pname = "january";
-  version = "5d98afccf087cbebf3b7e0ac13f753c688c0a25a";
+  version = "d8a94105f0abf81017f0882056b3e03018b4450b";
 
-  OPENSSL_LIB_DIR = "${lib.getLib pkgs.openssl}/lib";
-  OPENSSL_INCLUDE_DIR = "${lib.getDev pkgs.openssl}/include";
+  src = fetchFromGitHub {
+    owner = "revoltchat";
+    repo = "january";
+    rev = version;
+    sha256 = "sha256-TJM2iqvLuOOnAQts7tcT1fXW1Ydi/Uu4UDX9uxh690g=";
+  };
 
-  buildInputs = with pkgs; [
+  nativeBuildInputs = [
     pkg-config
+  ];
+
+  buildInputs = [
     openssl
   ];
 
-  src = fetchFromGitHub {
-    owner = "brecert";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-QSIi8bQLIkZD3DZLHGnBDc0svyL2Sq7ScaFUeEPnFpM=";
+  meta = with lib; {
+    description = "Image proxy and embed generator";
+    homepage = "https://github.com/revoltchat/january";
+    license = licenses.agpl3Plus;
   };
-
-  cargoSha256 = "sha256-cu3rw2jIVRd0GdnDTuEbaDt7vx66cuGuzDF4oeOoR/c=";
 }

@@ -1,26 +1,35 @@
-{ pkgs
-, lib ? pkgs.lib
-, fetchFromGitHub ? pkgs.fetchFromGitHub
-, rustPlatform ? pkgs.rustPlatform
+{ lib
+, fetchFromGitHub
+, pkg-config
+, openssl
+, craneLib
 }:
-rustPlatform.buildRustPackage rec {
+craneLib.buildPackage {
   pname = "bonfire";
-  version = "95ab4985cafe98cbd45f208d271fa16a24a2e318";
+  version = "6d549a35b8be0fc0983aa09a561953f43868d8c4";
 
-  OPENSSL_LIB_DIR = "${lib.getLib pkgs.openssl}/lib";
-  OPENSSL_INCLUDE_DIR = "${lib.getDev pkgs.openssl}/include";
+  src = fetchFromGitHub {
+    owner = "brecert";
+    repo = "revolt-backend";
+    rev = "6d549a35b8be0fc0983aa09a561953f43868d8c4";
+    sha256 = "sha256-wgftIgNqNixGfbQIyPIjxy0Ul+2TjLhllA/F+79U5VI=";
+  };
 
-  buildInputs = with pkgs; [
+  cargoExtraArgs = "--package revolt-bonfire";
+
+  nativeBuildInputs = [
     pkg-config
+  ];
+
+  buildInputs = [
     openssl
   ];
 
-  src = fetchFromGitHub {
-    owner = "revoltchat";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-EB6YZ6rZVkReQr3pZ3n83gAx9vOPbQ6BCWkRnA9YZPA=";
-  };
+  doCheck = false;
 
-  cargoSha256 = "sha256-86VmRrWpenlAuzXf3gC1UZ8htnfzlW4QU0Lh46i5rfI=";
+  meta = with lib; {
+    description = "WebSocket Events Server for Revolt";
+    homepage = "https://revolt.chat/";
+    license = licenses.agpl3Plus;
+  };
 }

@@ -1,0 +1,7 @@
+procs:
+  mongodb: "mongod --dbpath ./.mongo"
+  redis: redis-server
+  january: january
+  autumn: autumn
+  delta: revolt-delta
+  bonfire: revolt-bonfire

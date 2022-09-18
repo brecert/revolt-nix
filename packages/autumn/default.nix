@@ -1,26 +1,31 @@
-{ pkgs
-, lib ? pkgs.lib
-, fetchFromGitHub ? pkgs.fetchFromGitHub
-, rustPlatform ? pkgs.rustPlatform
+{ lib
+, fetchFromGitHub
+, pkg-config
+, openssl
+, craneLib
 }:
-rustPlatform.buildRustPackage rec {
+craneLib.buildPackage rec {
   pname = "autumn";
-  version = "5bb15dbb5ca4b6cd167a92c4f264bdc09c76f0fd";
-
-  OPENSSL_LIB_DIR = "${lib.getLib pkgs.openssl}/lib";
-  OPENSSL_INCLUDE_DIR = "${lib.getDev pkgs.openssl}/include";
-
-  buildInputs = with pkgs; [
-    pkg-config
-    openssl
-  ];
+  version = "d74bafc66fb09f7ffdf19c471ab2eccf15a0d059";
 
   src = fetchFromGitHub {
     owner = "revoltchat";
-    repo = pname;
+    repo = "autumn";
     rev = version;
-    sha256 = "sha256-syE582nEZG+HsOqeOqPOrc+zQUNsSYU4jjndb4cbjQ8=";
+    sha256 = "sha256-4didjo6JvWyQYOTWT0temwfN06B9nPijZhP0iJtEVFw=";
   };
 
-  cargoSha256 = "sha256-+/15HyPW2MnSYJuYBRmOKjgg3XH9poce3XEEcb4UKiA=";
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    openssl
+  ];
+
+  meta = with lib; {
+    description = "Pluggable file server micro-service";
+    homepage = "https://github.com/revoltchat/autumn";
+    license = licenses.agpl3Plus;
+  };
 }

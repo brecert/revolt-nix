@@ -1,33 +1,35 @@
-{ pkgs
-, lib ? pkgs.lib
-, fetchFromGitHub ? pkgs.fetchFromGitHub
-, rustPlatform ? pkgs.rustPlatform
+{ lib
+, fetchFromGitHub
+, pkg-config
+, openssl
+, craneLib
 }:
-rustPlatform.buildRustPackage rec {
+craneLib.buildPackage rec {
   pname = "delta";
-  version = "8a10d2b866592aa13a099f0d5f1970f262407826";
-
-  OPENSSL_LIB_DIR = "${lib.getLib pkgs.openssl}/lib";
-  OPENSSL_INCLUDE_DIR = "${lib.getDev pkgs.openssl}/include";
-
-  buildInputs = with pkgs; [
-    pkg-config
-    openssl
-  ];
+  version = "6d549a35b8be0fc0983aa09a561953f43868d8c4";
 
   src = fetchFromGitHub {
     owner = "brecert";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-KwjJoCmeEvGCMLfP5KU2e7ixTuMTWbgkpwPkgXnthUc=";
+    repo = "revolt-backend";
+    rev = "6d549a35b8be0fc0983aa09a561953f43868d8c4";
+    sha256 = "sha256-wgftIgNqNixGfbQIyPIjxy0Ul+2TjLhllA/F+79U5VI=";
   };
 
-  postInstall = ''
-    mv $out/bin/revolt $out/bin/${pname}
-  '';
+  cargoExtraArgs = "--package revolt-delta";
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    openssl
+  ];
 
   doCheck = false;
-  dontStrip = true;
 
-  cargoSha256 = "sha256-+ClMlDiKud9Cfiyf3jNnfDbaCXC2/+tH2CoMKGNSHgw=";
+  meta = with lib; {
+    description = "Rest API Server for Revolt";
+    homepage = "https://revolt.chat/";
+    license = licenses.agpl3Plus;
+  };
 }
