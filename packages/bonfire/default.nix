@@ -6,13 +6,14 @@
 }:
 craneLib.buildPackage {
   pname = "bonfire";
-  version = "6d549a35b8be0fc0983aa09a561953f43868d8c4";
+  version = "0afbcc065fff02dafd0788de620ee5d849714712";
 
   src = fetchFromGitHub {
     owner = "brecert";
     repo = "revolt-backend";
-    rev = "6d549a35b8be0fc0983aa09a561953f43868d8c4";
-    sha256 = "sha256-wgftIgNqNixGfbQIyPIjxy0Ul+2TjLhllA/F+79U5VI=";
+    rev = "0afbcc065fff02dafd0788de620ee5d849714712";
+    sha256 = "sha256-ZXauxBnUjR8PnC7HmYY7o6PaR3paPTvwNGFsqzh1vu8=";
+    leaveDotGit = true; # git is not used for information, but we keep it for parity with delta
   };
 
   cargoExtraArgs = "--package revolt-bonfire";
