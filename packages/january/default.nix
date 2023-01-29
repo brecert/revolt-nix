@@ -6,13 +6,13 @@
 }:
 craneLib.buildPackage rec {
   pname = "january";
-  version = "d8a94105f0abf81017f0882056b3e03018b4450b";
+  version = "3aa7989fd24aca76edbcdd556cd22bd9e5c4785c";
 
   src = fetchFromGitHub {
     owner = "revoltchat";
     repo = "january";
     rev = version;
-    sha256 = "sha256-TJM2iqvLuOOnAQts7tcT1fXW1Ydi/Uu4UDX9uxh690g=";
+    sha256 = "sha256-l3PRA+1rk12TDrFpxD9bGhcw6L4f6yWYqodamcVafsk=";
   };
 
   nativeBuildInputs = [
