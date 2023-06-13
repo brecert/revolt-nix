@@ -9,13 +9,15 @@
 , openssl_1_1
 , gcc-unwrapped 
 , autoPatchelfHook
+, pkg-config
 }:
-stdenv.mkDerivation {
-  name = "mongodb-5.0.6";
+stdenv.mkDerivation rec {
+  pname = "mongodb";
+  version = "6.0.6";
   
   src = fetchurl {
-    url = "https://repo.mongodb.org/apt/ubuntu/dists/focal/mongodb-org/5.0/multiverse/binary-amd64/mongodb-org-server_5.0.6_amd64.deb";
-    hash = "sha256-Rk43PNQN8p2/3XDDjWOzJmzBjs39CR06kLrTtr+5ngo=";
+    url = "https://repo.mongodb.org/apt/ubuntu/dists/focal/mongodb-org/6.0/multiverse/binary-amd64/mongodb-org-server_6.0.6_amd64.deb";
+    hash = "sha256-HfXBxM2KUO4rvhvYDKZYbobuw5Ib6+UPeDr/1wQSH+E=";
   };
 
   nativeBuildInputs = [

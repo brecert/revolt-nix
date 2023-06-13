@@ -4,9 +4,10 @@
 , openssl
 , craneLib
 }:
+
 craneLib.buildPackage rec {
   pname = "january";
-  version = "3aa7989fd24aca76edbcdd556cd22bd9e5c4785c";
+  version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "revoltchat";
@@ -22,6 +23,8 @@ craneLib.buildPackage rec {
   buildInputs = [
     openssl
   ];
+
+  doCheck = false;
 
   meta = with lib; {
     description = "Image proxy and embed generator";

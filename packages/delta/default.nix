@@ -7,13 +7,13 @@
 }:
 craneLib.buildPackage rec {
   pname = "delta";
-  version = "0afbcc065fff02dafd0788de620ee5d849714712";
+  version = "20230611-5";
 
   src = fetchFromGitHub {
     owner = "revoltchat";
     repo = "backend";
-    rev = "0afbcc065fff02dafd0788de620ee5d849714712";
-    sha256 = "sha256-ZXauxBnUjR8PnC7HmYY7o6PaR3paPTvwNGFsqzh1vu8=";
+    rev = version;
+    sha256 = "sha256-+Hqlfayvrp4iTXdBkuyAS6PsuxcIBzAFzNr+7/jUyrE=";
     leaveDotGit = true; # git is used for build information
   };
 

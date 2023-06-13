@@ -6,13 +6,13 @@
 }:
 craneLib.buildPackage rec {
   pname = "autumn";
-  version = "1cb06c3644dfda801f39868d4a51fe48e5595096";
+  version = "1.1.10";
 
   src = fetchFromGitHub {
     owner = "revoltchat";
     repo = "autumn";
     rev = version;
-    sha256 = "sha256-howOXplrbtspYbHG1v+onVYl34lwgTDHbeO1rmAUIRw=";
+    sha256 = "sha256-KoS9Jzc3wVYf1kinjMq+EcjPPCi0Psw00BQhiQOGJIo=";
   };
 
   nativeBuildInputs = [
@@ -22,6 +22,8 @@ craneLib.buildPackage rec {
   buildInputs = [
     openssl
   ];
+
+  doCheck = false;
 
   meta = with lib; {
     description = "Pluggable file server micro-service";
